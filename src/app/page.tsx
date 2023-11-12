@@ -1,6 +1,6 @@
 "use client"
 
-import avro from "avsc"
+import avro, { Service, Type } from "avsc"
 import { useEffect, useState } from "react"
 import {
   ValidationResultPanel,
@@ -30,8 +30,19 @@ export default function Home() {
     if (schemaFormat === SchemaType.AVSC) {
       schemaType = avro.Type.forSchema(JSON.parse(schemaValue))
     } else if (schemaFormat === SchemaType.AVDL) {
-      schemaType = avro.parse(schemaValue).types[0]
+      const service = avro.parse(schemaValue) as Service
+      const topLevelName = service.protocol.types.find(
+        (type: Type & { event?: string }) => !!type.event
+      )
+
+      const type = service.types.find((type) => type.name === topLevelName.name)
+      schemaType = type
     }
+
+    if (!schemaType) {
+      return
+    }
+
     const result = validate(schemaType, JSON.parse(testJSONValue))
     setValidationResult(result)
   }
@@ -55,6 +66,10 @@ export default function Home() {
       <div className="font-light text-center mb-6 flex flex-col items-center gap-4">
         <div className="text-2xl">Avro Schema JSON Validator</div>
         <div className="max-w-md text-sm">{`Validate JSON against an Avro schema (AVSC or Avro IDL format)`}</div>
+        <div className="max-w-md text-sm">
+          You can use{" "}
+          <kbd className="border border-1 shadow-sm p-0.5">Shift</kbd>
+        </div>
         <div className="w-fit flex items-center">
           <SchemaFormatSelector
             schemaFormat={schemaFormat}
