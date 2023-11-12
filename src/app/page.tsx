@@ -68,7 +68,20 @@ export default function Home() {
         <div className="max-w-md text-sm">{`Validate JSON against an Avro schema (AVSC or Avro IDL format)`}</div>
         <div className="max-w-md text-sm">
           You can use{" "}
-          <kbd className="border border-1 shadow-sm p-0.5">Shift</kbd>
+          <kbd className="border border-1 shadow-sm p-0.5 rounded-md">
+            Shift
+          </kbd>
+          +<kbd className="border border-1 shadow-sm p-0.5 rounded-md">Alt</kbd>
+          +<kbd className="border border-1 shadow-sm p-0.5 rounded-md">F</kbd>/
+          <kbd className="border border-1 shadow-sm p-0.5 rounded-md">
+            Shift
+          </kbd>
+          +
+          <kbd className="border border-1 shadow-sm p-0.5 rounded-md">
+            Option
+          </kbd>
+          +<kbd className="border border-1 shadow-sm p-0.5 rounded-md">F</kbd>{" "}
+          to format your JSON.
         </div>
         <div className="w-fit flex items-center">
           <SchemaFormatSelector
