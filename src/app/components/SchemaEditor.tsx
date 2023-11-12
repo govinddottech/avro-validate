@@ -23,6 +23,10 @@ export const SchemaEditor: React.FC<SchemaEditorProps> = ({
   const schemaEditorRef = useRef<ReactCodeMirrorRef>(null)
 
   const handleKeyBinding = () => {
+    if (schemaFormat === SchemaType.AVDL) {
+      return true
+    }
+
     const activeElement = document.activeElement
 
     if (schemaEditorRef.current?.editor?.contains(activeElement)) {
@@ -33,6 +37,10 @@ export const SchemaEditor: React.FC<SchemaEditorProps> = ({
   }
 
   const validateJson = (value: string) => {
+    if (schemaFormat === SchemaType.AVDL) {
+      return true
+    }
+
     try {
       JSON.parse(value)
       setIsSchemaValid(true)
