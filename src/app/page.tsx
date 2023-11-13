@@ -142,7 +142,7 @@ export default function Home() {
       )}
       <div className="text-xs mt-16 text-center">
         made with 😤 by{" "}
-        <Link href={"https://govind.tech"} className="underline">
+        <Link target="#" href={"https://govind.tech"} className="underline">
           govind.tech
         </Link>
       </div>
