@@ -15,6 +15,7 @@ import {
   DEFAULT_AVSC_SCHEMA,
   DEFAULT_JSON,
 } from "@/app/lib/constants"
+import { findTopLevelRecord } from "./lib/topLevelType"
 
 export default function Home() {
   const [schemaValue, setSchemaValue] = useState<string>(DEFAULT_AVSC_SCHEMA)
@@ -30,21 +31,40 @@ export default function Home() {
     if (schemaFormat === SchemaType.AVSC) {
       schemaType = avro.Type.forSchema(JSON.parse(schemaValue))
     } else if (schemaFormat === SchemaType.AVDL) {
-      const service = avro.parse(schemaValue) as Service
-      const topLevelName = service.protocol.types.find(
-        (type: Type & { event?: string }) => !!type.event
-      )
+      try {
+        const service = avro.parse(schemaValue)
+        const types = service.types
 
-      const type = service.types.find((type) => type.name === topLevelName.name)
-      schemaType = type
+        let topLevelType
+        if (service.protocol.types.length === 1) {
+          topLevelType = types[0]
+        } else {
+          const topLevelTypeName = findTopLevelRecord(service.protocol.types)
+          topLevelType = types.find(
+            (type: Type) => type.name === topLevelTypeName
+          )
+        }
+        if (!topLevelType) {
+          throw new Error("Top-level record type not found in AVDL schema")
+        }
+        schemaType = avro.Type.forSchema(topLevelType)
+      } catch (error) {
+        console.error("Error parsing AVDL schema:", error)
+        return
+      }
     }
 
     if (!schemaType) {
+      console.error("No schema type defined")
       return
     }
 
-    const result = validate(schemaType, JSON.parse(testJSONValue))
-    setValidationResult(result)
+    try {
+      const result = validate(schemaType, JSON.parse(testJSONValue))
+      setValidationResult(result)
+    } catch (validationError) {
+      console.error("Validation error:", validationError)
+    }
   }
 
   useEffect(() => {
