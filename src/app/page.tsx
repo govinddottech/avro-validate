@@ -140,12 +140,12 @@ export default function Home() {
       {validationResult && (
         <ValidationResultPanel validationResult={validationResult} />
       )}
-      <div className="text-xs mt-16 text-center">
+      {/* <div className="text-xs mt-16 text-center">
         made with 😤 by{" "}
         <Link target="#" href={"https://govind.tech"} className="underline">
           govind.tech
         </Link>
-      </div>
+      </div> */}
     </main>
   )
 }
