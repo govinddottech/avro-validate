@@ -16,6 +16,7 @@ import {
   DEFAULT_JSON,
 } from "@/app/lib/constants"
 import { findTopLevelRecord } from "./lib/topLevelType"
+import Link from "next/link"
 
 export default function Home() {
   const [schemaValue, setSchemaValue] = useState<string>(DEFAULT_AVSC_SCHEMA)
@@ -139,6 +140,12 @@ export default function Home() {
       {validationResult && (
         <ValidationResultPanel validationResult={validationResult} />
       )}
+      <div className="text-xs mt-16 text-center">
+        made with 😤 by{" "}
+        <Link href={"https://govind.tech"} className="underline">
+          govind.tech
+        </Link>
+      </div>
     </main>
   )
 }
